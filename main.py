@@ -110,6 +110,7 @@ async def main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [InlineKeyboardButton("📚 Список предметів", callback_data='main_keyboard')],
         [InlineKeyboardButton("📚 Корисні файли", callback_data='KorFail')],
+        [InlineKeyboardButton("📝 Практичні завдання", callback_data='PrZavd')],
         [InlineKeyboardButton("ℹ️ Про бота", callback_data='about_command')],
         [InlineKeyboardButton("🛠️ Допомога", callback_data='help_command')]
     ]
@@ -129,6 +130,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [InlineKeyboardButton("📚 Список предметів", callback_data='main_keyboard')],
         [InlineKeyboardButton("📚 Корисні файли", callback_data='KorFail')],
+        [InlineKeyboardButton("📝 Практичні завдання", callback_data='PrZavd')],
         [InlineKeyboardButton("ℹ️ Про бота", callback_data='about_command')],
         [InlineKeyboardButton("🛠️ Допомога", callback_data='help_command')]
     ]
@@ -216,6 +218,72 @@ async def KorFail(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         await query.edit_message_text(
             "Ось всі корисні файли для підготовки🚀",
+            reply_markup=InlineKeyboardMarkup(keyboard)
+        )
+    except BadRequest:
+        pass
+#-----------------------------------------------------------------------------------------------------------------------
+# Функція для відображення практичних завданнь
+async def PrZavd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+    keyboard = [
+        [InlineKeyboardButton("📐Практичні завдання з математики", callback_data='PrZavdMathematics')],
+        [InlineKeyboardButton("📖Практичні завдання з Української мови", callback_data='PrZavdUkrMova')],
+        [InlineKeyboardButton("🏰 Практичні завдання з Історії України", callback_data='PrZavdHistory')],
+        [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')]
+    ]
+    try:
+        await query.edit_message_text(
+            text="Оберіть предмет",
+            reply_markup=InlineKeyboardMarkup(keyboard)
+        )
+    except BadRequest:
+        pass
+#-----------------------------------------------------------------------------------------------------------------------
+# Функція для відображення практичних завданнь з математики
+async def PrZavdMathematics(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+    keyboard = [
+        [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
+        [InlineKeyboardButton("⬅️ Назад", callback_data='PrZavd')],
+    ]
+    try:
+        await query.edit_message_text(
+            text="У розробці🛠️",
+            reply_markup=InlineKeyboardMarkup(keyboard)
+        )
+    except BadRequest:
+        pass
+#-----------------------------------------------------------------------------------------------------------------------
+# Функція для відображення практичних завданнь з Української мови
+async def PrZavdUkrMova(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+    keyboard = [
+        [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
+        [InlineKeyboardButton("⬅️ Назад", callback_data='PrZavd')],
+    ]
+    try:
+        await query.edit_message_text(
+            text="У розробці🛠️",
+            reply_markup=InlineKeyboardMarkup(keyboard)
+        )
+    except BadRequest:
+        pass
+#-----------------------------------------------------------------------------------------------------------------------
+# Функція для відображення практичних завданнь з Історії України
+async def PrZavdHistory(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+    keyboard = [
+        [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
+        [InlineKeyboardButton("⬅️ Назад", callback_data='PrZavd')],
+    ]
+    try:
+        await query.edit_message_text(
+            text="У розробці🛠️",
             reply_markup=InlineKeyboardMarkup(keyboard)
         )
     except BadRequest:
@@ -480,6 +548,7 @@ if __name__ == '__main__':
     # Реєстрація обробників callback-запитів
     app.add_handler(CallbackQueryHandler(main_menu, pattern='^main_menu$'))
     app.add_handler(CallbackQueryHandler(main_keyboard, pattern='^main_keyboard$'))
+    app.add_handler(CallbackQueryHandler(PrZavd, pattern='^PrZavd$'))
     app.add_handler(CallbackQueryHandler(KorFail, pattern='^KorFail$'))
     app.add_handler(CallbackQueryHandler(DovMat, pattern='^DovMat$'))
     app.add_handler(CallbackQueryHandler(about_command, pattern='^about_command$'))
@@ -487,6 +556,9 @@ if __name__ == '__main__':
     app.add_handler(CallbackQueryHandler(history_architecture, pattern='^history_architecture$'))
     app.add_handler(CallbackQueryHandler(history_art, pattern='^history_art$'))
     app.add_handler(CallbackQueryHandler(history_personalities, pattern='^history_personalities$'))
+    app.add_handler(CallbackQueryHandler(PrZavdMathematics, pattern='^PrZavdMathematics$'))
+    app.add_handler(CallbackQueryHandler(PrZavdUkrMova, pattern='^PrZavdUkrMova$'))
+    app.add_handler(CallbackQueryHandler(PrZavdHistory, pattern='^PrZavdHistory$'))
     # Обробники для пагінації предметів
     # Використовуємо r'^SubjectName(_\d+)?$' для обробки 'SubjectName' (1 сторінка) і 'SubjectName_X' (X сторінка)
     app.add_handler(CallbackQueryHandler(Mathematics, pattern=r'^Mathematics(_\d+)?$'))
