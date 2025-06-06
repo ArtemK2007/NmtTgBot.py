@@ -136,7 +136,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "Привіт! 👋 Цей бот допоможе тобі підготуватись до НМТ. Обирай предмет, проходь тести, слідкуй за прогресом — і впевнено йди до 200+ балів! 🚀📚✨.\n\nОберіть дію:",
         reply_markup=InlineKeyboardMarkup(keyboard)
     )
-
 #-----------------------------------------------------------------------------------------------------------------------
 # Функція для команди "Про бота"
 async def about_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -154,6 +153,28 @@ async def about_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "- Проводжу тести для закріплення знань\n\n"
             "Якщо маєш питання або пропозиції — звертайся до розробника!\n\n"
             "Щасливої підготовки та високих балів! 🎉",
+            reply_markup=InlineKeyboardMarkup(keyboard)
+        )
+    except BadRequest:
+        pass
+#-----------------------------------------------------------------------------------------------------------------------
+# Функція для команди "Допомога"
+async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+    keyboard = [
+        [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
+    ]
+    try:
+        await query.edit_message_text(
+            "🛠️ Допомога\n\n"
+            "Цей бот допоможе тобі підготуватися до НМТ. Ось як ним користуватися:\n"
+            "- Обирай предмети зі списку.\n"
+            "- Переглядай теми та матеріали.\n"
+            "- Відповідай на тестові питання (планується).\n"
+            "- Використовуй кнопки навігації для переходу між сторінками.\n\n"
+            "Якщо виникають проблеми або є ідеї, пиши розробнику.\n\n"
+            "Успіхів у підготовці! 🚀",
             reply_markup=InlineKeyboardMarkup(keyboard)
         )
     except BadRequest:
@@ -189,7 +210,8 @@ async def KorFail(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.answer()
     keyboard = [
         [InlineKeyboardButton("📚 Додаткові матеріали з математики", callback_data='DovMat')],
-        [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')]
+        [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
+        [InlineKeyboardButton("➡️До списку предметів➡️", callback_data='main_keyboard')]
     ]
     try:
         await query.edit_message_text(
@@ -240,7 +262,9 @@ async def Mathematics(update: Update, context: ContextTypes.DEFAULT_TYPE):
         page = total_pages
     elif total_pages == 0: # Якщо немає тем, то немає і сторінок
         page = 0
-    keyboard = []
+    keyboard = [
+        [InlineKeyboardButton("⬅️До списку предметів⬅️", callback_data='main_keyboard')],
+    ]
     if total_pages > 0: # Лише якщо є теми, додаємо кнопки тем
         start_index = (page - 1) * ITEMS_PER_PAGE
         end_index = start_index + ITEMS_PER_PAGE
@@ -294,7 +318,9 @@ async def UkrMova(update: Update, context: ContextTypes.DEFAULT_TYPE):
         page = total_pages
     elif total_pages == 0:
         page = 0
-    keyboard = []
+    keyboard = [
+        [InlineKeyboardButton("⬅️До списку предметів⬅️", callback_data='main_keyboard')],
+    ]
     if total_pages > 0:
         start_index = (page - 1) * ITEMS_PER_PAGE
         end_index = start_index + ITEMS_PER_PAGE
@@ -329,13 +355,15 @@ async def UkrMova(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def History(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
+
     keyboard = [
         # При натисканні "Список тем" завжди переходимо на першу сторінку
         [InlineKeyboardButton("📚 Список тем", callback_data='show_history_topics_1')],
         [InlineKeyboardButton("🧑‍🏫 Персоналії", callback_data='history_personalities')], # Ці кнопки поки не обробляються
         [InlineKeyboardButton("🏛️ Архітектура", callback_data='history_architecture')], # Ці кнопки поки не обробляються
         [InlineKeyboardButton("🎨 Мистецтво", callback_data='history_art')], # Ці кнопки поки не обробляються
-        [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')]
+        [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
+        [InlineKeyboardButton("⬅️До списку предметів⬅️", callback_data='main_keyboard')]
     ]
     try:
         await query.edit_message_text(
@@ -344,6 +372,54 @@ async def History(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
     except BadRequest:
         pass # Ігноруємо помилку, якщо повідомлення не змінилось
+#-----------------------------------------------------------------------------------------------------------------------
+# Функція для "Персоналії історія"
+async def history_personalities(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+    keyboard = [
+        [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
+        [InlineKeyboardButton("⬅️ Назад", callback_data='History')],
+    ]
+    try:
+        await query.edit_message_text(
+            text="У розробці🛠️",
+            reply_markup=InlineKeyboardMarkup(keyboard)
+        )
+    except BadRequest:
+        pass
+#-----------------------------------------------------------------------------------------------------------------------
+# Функція для "Архітектура історія"
+async def history_architecture(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+    keyboard = [
+        [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
+        [InlineKeyboardButton("⬅️ Назад", callback_data='History')],
+    ]
+    try:
+        await query.edit_message_text(
+            text="У розробці🛠️",
+            reply_markup=InlineKeyboardMarkup(keyboard)
+        )
+    except BadRequest:
+        pass
+#-----------------------------------------------------------------------------------------------------------------------
+# Функція для "Мистецтво історія"
+async def history_art(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+    keyboard = [
+        [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
+        [InlineKeyboardButton("⬅️ Назад", callback_data='History')],
+    ]
+    try:
+        await query.edit_message_text(
+            text="У розробці🛠️",
+            reply_markup=InlineKeyboardMarkup(keyboard)
+        )
+    except BadRequest:
+        pass
 #-----------------------------------------------------------------------------------------------------------------------
 # Функція для пагінації тем з історії України
 async def show_history_topics(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -407,6 +483,10 @@ if __name__ == '__main__':
     app.add_handler(CallbackQueryHandler(KorFail, pattern='^KorFail$'))
     app.add_handler(CallbackQueryHandler(DovMat, pattern='^DovMat$'))
     app.add_handler(CallbackQueryHandler(about_command, pattern='^about_command$'))
+    app.add_handler(CallbackQueryHandler(help_command, pattern='^help_command$'))
+    app.add_handler(CallbackQueryHandler(history_architecture, pattern='^history_architecture$'))
+    app.add_handler(CallbackQueryHandler(history_art, pattern='^history_art$'))
+    app.add_handler(CallbackQueryHandler(history_personalities, pattern='^history_personalities$'))
     # Обробники для пагінації предметів
     # Використовуємо r'^SubjectName(_\d+)?$' для обробки 'SubjectName' (1 сторінка) і 'SubjectName_X' (X сторінка)
     app.add_handler(CallbackQueryHandler(Mathematics, pattern=r'^Mathematics(_\d+)?$'))
