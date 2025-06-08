@@ -577,6 +577,7 @@ async def History(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def history_personalities(update: Update, context: ContextTypes.DEFAULT_TYPE):
     BASE_PATH = r"C:\Users\artem\Desktop\TgBotNmt\HistoryPersonalities"
     query = update.callback_query
+    print(f"[DEBUG] Отримано callback: {query.data}")
     await query.answer()
 
     data = query.data or ""
@@ -639,6 +640,7 @@ async def history_personalities(update: Update, context: ContextTypes.DEFAULT_TY
 async def history_architecture(update: Update, context: ContextTypes.DEFAULT_TYPE):
     BASE_PATH1 = r"C:\Users\artem\Desktop\TgBotNmt\HistoryArchitecture"
     query = update.callback_query
+    print(f"[DEBUG] Отримано callback: {query.data}")
     await query.answer()
     data = query.data or ""
     number = 1
@@ -699,6 +701,7 @@ async def history_architecture(update: Update, context: ContextTypes.DEFAULT_TYP
 async def history_art(update: Update, context: ContextTypes.DEFAULT_TYPE):
     BASE_PATH2 = r"C:\Users\artem\Desktop\TgBotNmt\HistoryArt"
     query = update.callback_query
+    print(f"[DEBUG] Отримано callback: {query.data}")
     await query.answer()
     data = query.data or ""
     number = 1
@@ -811,7 +814,6 @@ if __name__ == '__main__':
     app.add_handler(CommandHandler("start", start))
     # Реєстрація обробників callback-запитів
     app.add_handler(CallbackQueryHandler(main_menu, pattern='^main_menu$'))
-    app.add_handler(CallbackQueryHandler(History, pattern='^History$'))
     app.add_handler(CallbackQueryHandler(main_keyboard, pattern='^main_keyboard$'))
     app.add_handler(CallbackQueryHandler(HistoryDates1, pattern='^HistoryDates1$'))
     app.add_handler(CallbackQueryHandler(HistoryDates2, pattern='^HistoryDates2$'))
@@ -822,23 +824,20 @@ if __name__ == '__main__':
     app.add_handler(CallbackQueryHandler(DovMat, pattern='^DovMat$'))
     app.add_handler(CallbackQueryHandler(about_command, pattern='^about_command$'))
     app.add_handler(CallbackQueryHandler(help_command, pattern='^help_command$'))
-    app.add_handler(CallbackQueryHandler(history_architecture, pattern='^history_architecture$'))
-    app.add_handler(CallbackQueryHandler(history_art, pattern='^history_art$'))
-    app.add_handler(CallbackQueryHandler(history_personalities, pattern='^history_personalities$'))
+    app.add_handler(CallbackQueryHandler(history_personalities, pattern=r'^person_\d+$'))
+    app.add_handler(CallbackQueryHandler(history_architecture, pattern=r'^architecture_\d+$'))
+    app.add_handler(CallbackQueryHandler(history_art, pattern=r'^art_\d+$'))
     app.add_handler(CallbackQueryHandler(PrZavdMathematics, pattern='^PrZavdMathematics$'))
     app.add_handler(CallbackQueryHandler(PrZavdUkrMova, pattern='^PrZavdUkrMova$'))
     app.add_handler(CallbackQueryHandler(PrZavdHistory, pattern='^PrZavdHistory$'))
     app.add_handler(CallbackQueryHandler(send_ukrainian_topic_file, pattern=r'^ukrainian_topic_\d+$'))
-
-    # Обробники для пагінації предметів
-    # Використовуємо r'^SubjectName(_\d+)?$' для обробки 'SubjectName' (1 сторінка) і 'SubjectName_X' (X сторінка)
     app.add_handler(CallbackQueryHandler(Mathematics, pattern=r'^Mathematics(_\d+)?$'))
-    app.add_handler(CallbackQueryHandler(UkrMova, pattern=r'^UkrMova(_\d+)?$')) # Додано обробник для УкрМови
-    app.add_handler(CallbackQueryHandler(History, pattern=r'^History$')) # Цей обробник веде в меню історії
-    app.add_handler(CallbackQueryHandler(show_history_topics, pattern=r'^show_history_topics(_\d+)?$')) # Обробник для пагінації тем історії
-    app.add_handler(CallbackQueryHandler(history_personalities, pattern=r'^person_\d+$'))
-    app.add_handler(CallbackQueryHandler(history_architecture, pattern=r'^architecture_\d+$'))
-    app.add_handler(CallbackQueryHandler(history_art, pattern=r'^art_\d+$'))
+    app.add_handler(CallbackQueryHandler(UkrMova, pattern=r'^UkrMova(_\d+)?$'))
+    app.add_handler(CallbackQueryHandler(History, pattern=r'^History$'))
+    app.add_handler(CallbackQueryHandler(show_history_topics, pattern=r'^show_history_topics(_\d+)?$'))
+    app.add_handler(CallbackQueryHandler(history_personalities, pattern='^history_personalities$'))
+    app.add_handler(CallbackQueryHandler(history_architecture, pattern='^history_architecture$'))
+    app.add_handler(CallbackQueryHandler(history_art, pattern='^history_art$'))
 
     print("Бот запущено...")
     app.run_polling()
