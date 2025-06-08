@@ -592,7 +592,6 @@ async def history_personalities(update: Update, context: ContextTypes.DEFAULT_TY
 
     # Завжди визначаємо базову клавіатуру
     keyboard = [
-        [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
         [InlineKeyboardButton("⬅️ Назад до розділу Історія", callback_data='History')],
     ]
 
@@ -653,15 +652,14 @@ async def history_architecture(update: Update, context: ContextTypes.DEFAULT_TYP
     text_path = os.path.join(BASE_PATH1, f"{number}.txt")
 
     keyboard = [
-        [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
-        [InlineKeyboardButton("⬅️ Назад", callback_data='History')],
+        [InlineKeyboardButton("⬅️ Назад до розділу Історія", callback_data='History')],
     ]
 
     # Додаємо кнопки навігації, якщо це можливо
     nav_buttons = []
     if number > 1:
         nav_buttons.append(InlineKeyboardButton("⬅️ Попередня", callback_data=f'architecture_{number - 1}'))
-    if number < 54:
+    if number < 53:
         nav_buttons.append(InlineKeyboardButton("Наступна ➡️", callback_data=f'architecture_{number + 1}'))
 
     if nav_buttons:
@@ -699,19 +697,62 @@ async def history_architecture(update: Update, context: ContextTypes.DEFAULT_TYP
 #-----------------------------------------------------------------------------------------------------------------------
 # Функція для "Мистецтво історія"
 async def history_art(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    BASE_PATH2 = r"C:\Users\artem\Desktop\TgBotNmt\HistoryArt"
     query = update.callback_query
     await query.answer()
+    data = query.data or ""
+    number = 1
+    if data.startswith('art_'):
+        try:
+            number = int(data.split('_')[1])
+        except ValueError:
+            number = 1
+
+    photo_path = os.path.join(BASE_PATH2, f"{number}.jpg")
+    text_path = os.path.join(BASE_PATH2, f"{number}.txt")
+
     keyboard = [
-        [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
-        [InlineKeyboardButton("⬅️ Назад", callback_data='History')],
+        [InlineKeyboardButton("⬅️ Назад до розділу Історія", callback_data='History')],
     ]
+
+    nav_buttons = []
+    if number > 1:
+        nav_buttons.append(InlineKeyboardButton("⬅️ Попередня", callback_data=f'art_{number - 1}'))
+    if number < 37:
+        nav_buttons.append(InlineKeyboardButton("Наступна ➡️", callback_data=f'art_{number + 1}'))
+
+    if nav_buttons:
+        keyboard.append(nav_buttons)
+
+    # Перетворюємо список списків на InlineKeyboardMarkup
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
     try:
+        if os.path.exists(text_path):
+            with open(text_path, 'r', encoding='utf-8') as f:
+                text = f.read()
+        else:
+            text = "Текст відсутній."
+
+        if os.path.exists(photo_path):
+            with open(photo_path, 'rb') as photo_file:
+                media = InputMediaPhoto(media=photo_file, caption=text)
+                await query.edit_message_media(
+                    media=media,
+                    reply_markup=reply_markup  # Використовуємо попередньо створений reply_markup
+                )
+        else:
+            await query.edit_message_text(
+                text=text,
+                reply_markup=reply_markup  # Використовуємо попередньо створений reply_markup
+            )
+
+    except BadRequest as e:  # Перехоплюємо виняток, щоб побачити помилку
+        print(f"Помилка BadRequest: {e}")  # Виводимо помилку для налагодження
         await query.edit_message_text(
-            text="У розробці🛠️",
-            reply_markup=InlineKeyboardMarkup(keyboard)
+            text="Сталася помилка.",
+            reply_markup=reply_markup  # Все одно використовуємо потрібну клавіатуру
         )
-    except BadRequest:
-        pass
 #-----------------------------------------------------------------------------------------------------------------------
 # Функція для пагінації тем з історії України
 async def show_history_topics(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -728,9 +769,6 @@ async def show_history_topics(update: Update, context: ContextTypes.DEFAULT_TYPE
         total_pages = 1
     elif len(history_topics) == 0: # Якщо список тем порожній
         total_pages = 0
-    # Забезпечуємо, що номер сторінки знаходиться в допустимих межах
-    if page < 1:
-        page = 1
     elif page > total_pages and total_pages > 0:
         page = total_pages
     elif total_pages == 0: # Якщо немає тем, то немає і сторінок
