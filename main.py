@@ -1,4 +1,4 @@
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, InputMediaPhoto
 from dotenv import load_dotenv
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 from telegram.error import BadRequest # Імпортуємо BadRequest для специфічної обробки помилок
@@ -101,7 +101,6 @@ history_topics = [
 ITEMS_PER_PAGE = 10
 EMOJI_START = "📘 "
 EMOJI_END = " ✨"
-
 #-----------------------------------------------------------------------------------------------------------------------
 # Функція для повернення в головне меню
 async def main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -212,6 +211,7 @@ async def KorFail(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.answer()
     keyboard = [
         [InlineKeyboardButton("📚 Додаткові матеріали з математики", callback_data='DovMat')],
+        [InlineKeyboardButton("📚 Всі дати для НМТ з історії", callback_data='HistoryDates1')],
         [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
         [InlineKeyboardButton("➡️До списку предметів➡️", callback_data='main_keyboard')]
     ]
@@ -222,6 +222,112 @@ async def KorFail(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
     except BadRequest:
         pass
+#-----------------------------------------------------------------------------------------------------------------------
+# Функція для відображення всіх дат з історії
+async def HistoryDates1(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    keyboard = [
+        [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
+        [InlineKeyboardButton("➡️ Наступна сторінка", callback_data='HistoryDates2')],
+    ]
+    await query.answer()
+    text = (
+        "🏰 Княжа доба (Русь-Україна)\n"
+        "860 р. — Похід варязького князя Аскольда на Константинополь. Укладено перший договір Русі з Візантією.\n"
+        "882 р. — Князь Олег об’єднав північні та південні руські землі, убивши київського князя Аскольда.\n"
+        "907–944 рр. — Походи руських князів Олега та Ігоря на столицю Візантії — Константинополь.\n"
+        "988 р. — Хрещення Русі. Князь Володимир запровадив християнство державною релігією.\n"
+        "1019–1054 рр. — Роки правління Ярослава Мудрого в Києві.\n"
+        "1036 р. — Ярослав Мудрий розгромив печенігів. За легендою, на місці перемоги князь наказав збудувати Софіївський собор у 1037 році.\n"
+        "1097 р. — Володимир Мономах організував Любецький з’їзд князів.\n"
+        "1113 р. — Нестор Літописець уклав «Повість минулих літ».\n"
+        "1113–1125 рр. — Правління Володимира Мономаха."
+    )
+    await query.edit_message_text(text, reply_markup=InlineKeyboardMarkup(keyboard))
+
+#-----------------------------------------------------------------------------------------------------------------------
+async def HistoryDates2(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    keyboard = [
+        [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
+        [InlineKeyboardButton("⬅️ Минула сторінка", callback_data='HistoryDates1')],
+        [InlineKeyboardButton("➡️ Наступна сторінка", callback_data='HistoryDates3')],
+    ]
+    await query.answer()
+    text = (
+        "🏰 Галицько-Волинська держава\n"
+        "1187 р. — Назва «Україна» вперше згадана в писемних джерелах.\n"
+        "1199 р. — Початок утворення Галицько-Волинської держави.\n\n"
+        "⚔️ Монгольська навала та литовсько-польська доба\n"
+        "1238–1264 рр. — Монгольська навала. Руйнування Києва в 1240 році.\n"
+        "1362 р. — Битва на Сині Води. Литовці здобули контроль над українськими землями.\n"
+        "1385 р. — Укладення Кревської унії між Польщею та Литвою.\n\n"
+        "🛡️ Козацька доба\n\n"
+        "1556–1561 рр. — Створення Пересопницького Євангелія.\n"
+        "1556 р. — Заснування князем Д. Вишневецьким першої Січі на о. Мала Хортиця.\n"
+        "1569 р. — Люблінська унія; утворення Речі Посполитої..\n"
+        "1586 р. — Утворення першої братської (слов'яно-греко-латинської) школи у м. Львів.\n"
+        "1596 р. — Берестейська унія; утворення Української Греко-Католицької Церкви..\n"
+        "1618 р. — Похід козаків під проводом гетьмана П. Конашевича-Сагайдачного на Москву..\n"
+        "1621 р. — Хотинська битва..\n"
+        "1625 р. — Куруківська угода..\n"
+    )
+    await query.edit_message_text(text, reply_markup=InlineKeyboardMarkup(keyboard))
+
+#-----------------------------------------------------------------------------------------------------------------------
+async def HistoryDates3(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    keyboard = [
+        [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
+        [InlineKeyboardButton("⬅️ Минула сторінка", callback_data='HistoryDates2')],
+        [InlineKeyboardButton("➡️ Наступна сторінка", callback_data='HistoryDates4')],
+    ]
+
+    text = (
+        "🧭 Козацька держава та Руїна\n"
+        "1648–1657 рр. — Руїна (період політичної і територіальної дезінтеграції Лівобережної України).\n"
+        "1654 р. — Переяславська угода між Московією та козацькою Україною.\n"
+        "1667 р. — Андрусівський мирний договір між Московією та Річчю Посполитою; Лівобережна Україна залишалася під контролем Московії.\n"
+        "1686 р. — Вічний мир між Московією та Річчю Посполитою; офіційне визнання Лівобережної України за Московією.\n"
+        "🗺️ Українські землі у складі інших держав\n\n"
+        "1775 р. — Ліквідація Запорізької Січі.\n"
+        "1793 р. — Другий поділ Речі Посполитої; приєднання Правобережної України до Російської імперії.\n"
+        "1795 р. — Третій поділ Речі Посполитої; остаточне приєднання Волині, Поділля та Східної Галичини до Російської імперії.\n"
+        "🏛️ Україна в XIX – на початку XX століття\n\n"
+        "1861 р. — Скасування кріпосного права в Російській імперії.\n"
+        "1905 р. — Перша російська революція; початок політичної активності українських партій.\n"
+        "1917 р. — Лютнева революція в Росії; проголошення Української Центральної Ради.\n"
+        "🕊️ Українська революція та боротьба за незалежність\n\n"
+        "1917–1921 рр. — Українська революція.\n"
+        "1918 р. — Проголошення незалежності Української Народної Республіки.\n"
+        "1921 р.— Ризький мирний договір; розподіл українських земель між Польщею, Радянською Росією та Румунією.\n"
+    )
+
+    await query.edit_message_text(text, reply_markup=InlineKeyboardMarkup(keyboard))
+#-----------------------------------------------------------------------------------------------------------------------
+async def HistoryDates4(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    keyboard = [
+        [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
+        [InlineKeyboardButton("⬅️ Минула сторінка", callback_data='HistoryDates3')],
+    ]
+
+    text = (
+        "🧱 Радянська доба та боротьба за незалежність\n"
+        "1932–1933 рр. — Голодомор в Україні.\n"
+        "1941–1945 рр. — Друга світова війна; окупація України нацистською Німеччиною.\n"
+        "1945 р. — Завершення Другої світової війни; Україна стала однією з засновниць Організації Об'єднаних Націй.\n"
+        "1954 р. — Передача Кримської області з РРФСР до УРСР.\n"
+        "1991 р. — Проголошення незалежності України.\n"
+        "🏛️ Незалежна Україна\n\n"
+        "1996 р. — Прийняття Конституції України.\n"
+        "2004 р. — Помаранчева революція.\n"
+        "2014 р. — Євромайдан; Революція Гідності; анексія Криму Росією; початок війни на сході України.\n"
+        "2019 р. — Проголошення Томосу про автокефалію Православної церкви України.\n"
+        "2022 р. — Повномасштабне вторгнення росії в Україну.\n"
+    )
+
+    await query.edit_message_text(text, reply_markup=InlineKeyboardMarkup(keyboard))
 #-----------------------------------------------------------------------------------------------------------------------
 # Функція для відображення практичних завданнь
 async def PrZavd(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -419,6 +525,32 @@ async def UkrMova(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except BadRequest:
         pass # Ігноруємо помилку, якщо повідомлення не змінилось
 #-----------------------------------------------------------------------------------------------------------------------
+# Функція для відправки файлів з укр мови
+async def send_ukrainian_topic_file(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+
+    try:
+        topic_number = int(query.data.split("_")[-1])
+        topic_name = ukrainian_topics[topic_number - 1].split(".")[0].replace(" ", "_")
+        file_path = f"UkrMovaFiles/{topic_number}_{topic_name}.pdf"
+
+        keyboard = [
+            [InlineKeyboardButton("⬅️ Назад", callback_data='UkrMova')],
+            [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
+        ]
+
+        with open(file_path, "rb") as file:
+            await query.message.reply_document(file, filename=os.path.basename(file_path))
+            await query.message.reply_text("Оберіть подальшу дію:", reply_markup=InlineKeyboardMarkup(keyboard))
+
+    except FileNotFoundError:
+        await query.message.reply_text("⚠️ Файл не знайдено. Можливо, він ще не доданий.")
+    except Exception as e:
+        await query.message.reply_text("Сталася помилка при відправленні файлу.")
+        print(f"[send_ukrainian_topic_file] Error: {e}")
+
+#-----------------------------------------------------------------------------------------------------------------------
 # Функція для розділу "Історія України"
 async def History(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
@@ -427,9 +559,9 @@ async def History(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         # При натисканні "Список тем" завжди переходимо на першу сторінку
         [InlineKeyboardButton("📚 Список тем", callback_data='show_history_topics_1')],
-        [InlineKeyboardButton("🧑‍🏫 Персоналії", callback_data='history_personalities')], # Ці кнопки поки не обробляються
-        [InlineKeyboardButton("🏛️ Архітектура", callback_data='history_architecture')], # Ці кнопки поки не обробляються
-        [InlineKeyboardButton("🎨 Мистецтво", callback_data='history_art')], # Ці кнопки поки не обробляються
+        [InlineKeyboardButton("🧑‍🏫 Персоналії", callback_data='history_personalities')],
+        [InlineKeyboardButton("🏛️ Архітектура", callback_data='history_architecture')],
+        [InlineKeyboardButton("🎨 Мистецтво", callback_data='history_art')],
         [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
         [InlineKeyboardButton("⬅️До списку предметів⬅️", callback_data='main_keyboard')]
     ]
@@ -443,35 +575,127 @@ async def History(update: Update, context: ContextTypes.DEFAULT_TYPE):
 #-----------------------------------------------------------------------------------------------------------------------
 # Функція для "Персоналії історія"
 async def history_personalities(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    BASE_PATH = r"C:\Users\artem\Desktop\TgBotNmt\HistoryPersonalities"
     query = update.callback_query
     await query.answer()
+
+    data = query.data or ""
+    number = 1
+    if data.startswith('person_'):
+        try:
+            number = int(data.split('_')[1])
+        except ValueError:
+            number = 1
+
+    photo_path = os.path.join(BASE_PATH, f"{number}.jpg")
+    text_path = os.path.join(BASE_PATH, f"{number}.txt")
+
+    # Завжди визначаємо базову клавіатуру
     keyboard = [
         [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
-        [InlineKeyboardButton("⬅️ Назад", callback_data='History')],
+        [InlineKeyboardButton("⬅️ Назад до розділу Історія", callback_data='History')],
     ]
+
+    # Додаємо кнопки навігації, якщо це можливо
+    nav_buttons = []
+    if number > 1:
+        nav_buttons.append(InlineKeyboardButton("⬅️ Попередня", callback_data=f'person_{number - 1}'))
+    if number < 54:
+        nav_buttons.append(InlineKeyboardButton("Наступна ➡️", callback_data=f'person_{number + 1}'))
+
+    if nav_buttons:
+        keyboard.append(nav_buttons)
+
+    # Перетворюємо список списків на InlineKeyboardMarkup
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
     try:
+        if os.path.exists(text_path):
+            with open(text_path, 'r', encoding='utf-8') as f:
+                text = f.read()
+        else:
+            text = "Текст для цієї персоналії відсутній."
+
+        if os.path.exists(photo_path):
+            with open(photo_path, 'rb') as photo_file:
+                media = InputMediaPhoto(media=photo_file, caption=text)
+                await query.edit_message_media(
+                    media=media,
+                    reply_markup=reply_markup # Використовуємо попередньо створений reply_markup
+                )
+        else:
+            await query.edit_message_text(
+                text=text,
+                reply_markup=reply_markup # Використовуємо попередньо створений reply_markup
+            )
+
+    except BadRequest as e: # Перехоплюємо виняток, щоб побачити помилку
+        print(f"Помилка BadRequest: {e}") # Виводимо помилку для налагодження
         await query.edit_message_text(
-            text="У розробці🛠️",
-            reply_markup=InlineKeyboardMarkup(keyboard)
+            text="Сталася помилка.",
+            reply_markup=reply_markup # Все одно використовуємо потрібну клавіатуру
         )
-    except BadRequest:
-        pass
-#-----------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------
 # Функція для "Архітектура історія"
 async def history_architecture(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    BASE_PATH1 = r"C:\Users\artem\Desktop\TgBotNmt\HistoryArchitecture"
     query = update.callback_query
     await query.answer()
+    data = query.data or ""
+    number = 1
+    if data.startswith('architecture_'):
+        try:
+            number = int(data.split('_')[1])
+        except ValueError:
+            number = 1
+
+    photo_path = os.path.join(BASE_PATH1, f"{number}.jpg")
+    text_path = os.path.join(BASE_PATH1, f"{number}.txt")
+
     keyboard = [
         [InlineKeyboardButton("🏠 У головне меню", callback_data='main_menu')],
         [InlineKeyboardButton("⬅️ Назад", callback_data='History')],
     ]
+
+    # Додаємо кнопки навігації, якщо це можливо
+    nav_buttons = []
+    if number > 1:
+        nav_buttons.append(InlineKeyboardButton("⬅️ Попередня", callback_data=f'architecture_{number - 1}'))
+    if number < 54:
+        nav_buttons.append(InlineKeyboardButton("Наступна ➡️", callback_data=f'architecture_{number + 1}'))
+
+    if nav_buttons:
+        keyboard.append(nav_buttons)
+
+    # Перетворюємо список списків на InlineKeyboardMarkup
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
     try:
+        if os.path.exists(text_path):
+            with open(text_path, 'r', encoding='utf-8') as f:
+                text = f.read()
+        else:
+            text = "Текст для цієї архітектури відсутній."
+
+        if os.path.exists(photo_path):
+            with open(photo_path, 'rb') as photo_file:
+                media = InputMediaPhoto(media=photo_file, caption=text)
+                await query.edit_message_media(
+                    media=media,
+                    reply_markup=reply_markup # Використовуємо попередньо створений reply_markup
+                )
+        else:
+            await query.edit_message_text(
+                text=text,
+                reply_markup=reply_markup # Використовуємо попередньо створений reply_markup
+            )
+
+    except BadRequest as e: # Перехоплюємо виняток, щоб побачити помилку
+        print(f"Помилка BadRequest: {e}") # Виводимо помилку для налагодження
         await query.edit_message_text(
-            text="У розробці🛠️",
-            reply_markup=InlineKeyboardMarkup(keyboard)
+            text="Сталася помилка.",
+            reply_markup=reply_markup # Все одно використовуємо потрібну клавіатуру
         )
-    except BadRequest:
-        pass
 #-----------------------------------------------------------------------------------------------------------------------
 # Функція для "Мистецтво історія"
 async def history_art(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -511,7 +735,9 @@ async def show_history_topics(update: Update, context: ContextTypes.DEFAULT_TYPE
         page = total_pages
     elif total_pages == 0: # Якщо немає тем, то немає і сторінок
         page = 0
-    keyboard = []
+    keyboard = [
+        [InlineKeyboardButton("⬅️ Назад до розділу Історія", callback_data='History')],
+    ]
     if total_pages > 0: # Лише якщо є теми, додаємо кнопки тем
         start_index = (page - 1) * ITEMS_PER_PAGE
         end_index = start_index + ITEMS_PER_PAGE
@@ -547,7 +773,12 @@ if __name__ == '__main__':
     app.add_handler(CommandHandler("start", start))
     # Реєстрація обробників callback-запитів
     app.add_handler(CallbackQueryHandler(main_menu, pattern='^main_menu$'))
+    app.add_handler(CallbackQueryHandler(History, pattern='^History$'))
     app.add_handler(CallbackQueryHandler(main_keyboard, pattern='^main_keyboard$'))
+    app.add_handler(CallbackQueryHandler(HistoryDates1, pattern='^HistoryDates1$'))
+    app.add_handler(CallbackQueryHandler(HistoryDates2, pattern='^HistoryDates2$'))
+    app.add_handler(CallbackQueryHandler(HistoryDates3, pattern='^HistoryDates3$'))
+    app.add_handler(CallbackQueryHandler(HistoryDates4, pattern='^HistoryDates4$'))
     app.add_handler(CallbackQueryHandler(PrZavd, pattern='^PrZavd$'))
     app.add_handler(CallbackQueryHandler(KorFail, pattern='^KorFail$'))
     app.add_handler(CallbackQueryHandler(DovMat, pattern='^DovMat$'))
@@ -559,12 +790,17 @@ if __name__ == '__main__':
     app.add_handler(CallbackQueryHandler(PrZavdMathematics, pattern='^PrZavdMathematics$'))
     app.add_handler(CallbackQueryHandler(PrZavdUkrMova, pattern='^PrZavdUkrMova$'))
     app.add_handler(CallbackQueryHandler(PrZavdHistory, pattern='^PrZavdHistory$'))
+    app.add_handler(CallbackQueryHandler(send_ukrainian_topic_file, pattern=r'^ukrainian_topic_\d+$'))
+
     # Обробники для пагінації предметів
     # Використовуємо r'^SubjectName(_\d+)?$' для обробки 'SubjectName' (1 сторінка) і 'SubjectName_X' (X сторінка)
     app.add_handler(CallbackQueryHandler(Mathematics, pattern=r'^Mathematics(_\d+)?$'))
     app.add_handler(CallbackQueryHandler(UkrMova, pattern=r'^UkrMova(_\d+)?$')) # Додано обробник для УкрМови
     app.add_handler(CallbackQueryHandler(History, pattern=r'^History$')) # Цей обробник веде в меню історії
     app.add_handler(CallbackQueryHandler(show_history_topics, pattern=r'^show_history_topics(_\d+)?$')) # Обробник для пагінації тем історії
+    app.add_handler(CallbackQueryHandler(history_personalities, pattern=r'^person_\d+$'))
+    app.add_handler(CallbackQueryHandler(history_architecture, pattern=r'^architecture_\d+$'))
+
     print("Бот запущено...")
     app.run_polling()
 #-----------------------------------------------------------------------------------------------------------------------
