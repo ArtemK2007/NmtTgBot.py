@@ -838,6 +838,7 @@ if __name__ == '__main__':
     app.add_handler(CallbackQueryHandler(show_history_topics, pattern=r'^show_history_topics(_\d+)?$')) # Обробник для пагінації тем історії
     app.add_handler(CallbackQueryHandler(history_personalities, pattern=r'^person_\d+$'))
     app.add_handler(CallbackQueryHandler(history_architecture, pattern=r'^architecture_\d+$'))
+    app.add_handler(CallbackQueryHandler(history_art, pattern=r'^art_\d+$'))
 
     print("Бот запущено...")
     app.run_polling()
